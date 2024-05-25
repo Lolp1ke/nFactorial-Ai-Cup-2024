@@ -5,7 +5,6 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.vectorstores import DocArrayInMemorySearch
 from langchain.prompts import PromptTemplate
 
-from langchain_core.documents import Document
 from langchain_core.vectorstores import VectorStoreRetriever
 
 
@@ -44,7 +43,7 @@ class openAILlm:
 
     def loadPdf(self, path_to_pdf: str) -> None:
         loader: PyPDFLoader = PyPDFLoader(file_path=path_to_pdf)
-        pages: List[Document] = loader.load_and_split()
+        pages = loader.load_and_split()
 
         self.retriever = DocArrayInMemorySearch.from_documents(
             pages, embedding=self.embeddings

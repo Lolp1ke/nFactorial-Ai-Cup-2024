@@ -1,7 +1,7 @@
 import glob
 from flask import Flask, request, Response
 from operator import itemgetter
-from bs import parse_links_from_query, parse_text_from_website
+# from bs import parse_links_from_query, parse_text_from_website
 
 from rag import openAILlm
 
@@ -19,57 +19,57 @@ llm: openAILlm = openAILlm(api_key=cfg["OPENAI_API_KEY"], model_name="gpt-3.5-tu
 
 @app.route("/")
 def hello_world() -> str:
-    return "<p>Hello, World!</p>"
+    return "<p>API works!</p>"
 
 
-@app.post("/read")
-def read() -> Response:
-    ALLOWED_EXTENSIONS: List[str] = ["pdf"]
+# @app.post("/read")
+# def read() -> Response:
+#     ALLOWED_EXTENSIONS: List[str] = ["pdf"]
 
-    def allowed_file(filename: str):
-        return (
-            "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
-        )
+#     def allowed_file(filename: str):
+#         return (
+#             "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+#         )
 
-    if "file" not in request.files:
-        return Response(response="Couldn't find file", status=400)
+#     if "file" not in request.files:
+#         return Response(response="Couldn't find file", status=400)
 
-    file = request.files["file"]
+#     file = request.files["file"]
 
-    if not (file and allowed_file(filename=file.filename)):
-        return Response(
-            response=f"File with this extension is not supported\nSupported file extensions are: {ALLOWED_EXTENSIONS}",
-            status=400,
-        )
+#     if not (file and allowed_file(filename=file.filename)):
+#         return Response(
+#             response=f"File with this extension is not supported\nSupported file extensions are: {ALLOWED_EXTENSIONS}",
+#             status=400,
+#         )
     
-    filepath: str = os.path.join("static", file.filename)
-    file.save(filepath)
-    llm.loadPdf(filepath)
+#     filepath: str = os.path.join("static", file.filename)
+#     file.save(filepath)
+#     llm.loadPdf(filepath)
 
 
-    return Response(response=f"All good\nContent: {file.read().decode("utf-8")}", status=200)
+#     return Response(response=f"All good\nContent: {file.read().decode("utf-8")}", status=200)
 
-@app.post("/prompt")
-def prompt() -> Response:
-    if llm.retriever == None:
-        return Response(response="No context provided", status=400)
-    chain = (
-            {
-                "context": itemgetter("question") | llm.retriever,
-                "question": itemgetter("question"),
-            }
-            | llm.promt
-            | llm.model
-            | llm.parser
-        )
+# @app.post("/prompt")
+# def prompt() -> Response:
+#     if llm.retriever == None:
+#         return Response(response="No context provided", status=400)
+#     chain = (
+#             {
+#                 "context": itemgetter("question") | llm.retriever,
+#                 "question": itemgetter("question"),
+#             }
+#             | llm.promt
+#             | llm.model
+#             | llm.parser
+#         )
     
-    data: Dict = request.json
-    prompt: str | None = data.get("prompt")
-    if prompt == None:
-        return Response(response="No prompt provided", status=400)
-    response: str = chain.invoke({"question": prompt})
+#     data: Dict = request.json
+#     prompt: str | None = data.get("prompt")
+#     if prompt == None:
+#         return Response(response="No prompt provided", status=400)
+#     response: str = chain.invoke({"question": prompt})
 
-    return Response(response=response, status=200)
+#     return Response(response=response, status=200)
 
 @app.post("/upload/<id>")
 def upload(id: str) -> Response:
@@ -147,24 +147,24 @@ def prompt_new(id: str) -> Response:
 
     return Response(response=response, status=200)
 
-@app.post("/search")
-def search() -> Response:
-    data: Dict = request.json
-    query: str | None = data.get("query")
-    if query == None:
-        return Response(response="No query provided", status=200)
+# @app.post("/search")
+# def search() -> Response:
+#     data: Dict = request.json
+#     query: str | None = data.get("query")
+#     if query == None:
+#         return Response(response="No query provided", status=200)
+# 
+    # links: List[str] = parse_links_from_query(query=query)
+    # long_text: str = ""
+    # for link in links:
+        # not_long_text: str | None = parse_text_from_website(url=link)
+        # if not_long_text == None: continue
+        # long_text += not_long_text
 
-    links: List[str] = parse_links_from_query(query=query)
-    long_text: str = ""
-    for link in links:
-        not_long_text: str | None = parse_text_from_website(url=link)
-        if not_long_text == None: continue
-        long_text += not_long_text
 
-
-    response: str = "Nothing"
-
-    return Response(response=long_text, status=200)
+    # response: str = "Nothing"
+# 
+    # return Response(response=long_text, status=200)
     
 
 @app.get("/check/<id>")

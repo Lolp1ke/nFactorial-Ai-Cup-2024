@@ -39,3 +39,5 @@ npm run start
 
 Before launching frontend set up .env file<br>
 BACKEND_PREFIX="http://127.0.0.1:5000" # If localhost use this one<br>
+
+sorry for commit history

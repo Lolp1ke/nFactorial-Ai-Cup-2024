@@ -1,0 +1,7 @@
+python-dotenv
+"langchain[docarray]"
+langchain
+langchain-openai
+pypdf
+beautifulsoup4
+requests

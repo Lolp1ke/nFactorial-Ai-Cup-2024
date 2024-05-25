@@ -1,11 +1,11 @@
 # nFactorial-Ai-Cup-2024
 Fork this repository and build nFactorial Ai Cup 2024 projects 
 
-## < Your Name >
+## < Alibek Bekzhanov>
 
-## < Your App's Name >
+## < Aral >
 
-## < Your App's description, technical considerations, etc. >
+## < Super precise AI search engine and HR manager >
 
 
 ## Typeform to submit:
